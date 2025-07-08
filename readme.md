@@ -27,7 +27,7 @@ For now, the logged-in user is hardcoded:
 {
   "username": "alice"
 }
-
+```
 All membership and voting logic should assume requests come from this user.
 
 # 📘 Endpoint Reference
