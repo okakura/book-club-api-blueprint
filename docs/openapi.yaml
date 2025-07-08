@@ -1,0 +1,242 @@
+openapi: 3.0.3
+info:
+  title: Book Club API
+  version: 1.0.0
+  description: API for managing book clubs, members, book proposals, and voting.
+servers:
+  - url: http://localhost:8080
+paths:
+  /clubs:
+    get:
+      summary: Get all book clubs
+      responses:
+        '200':
+          description: A list of clubs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Club'
+    post:
+      summary: Create a new club
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClubCreateRequest'
+      responses:
+        '201':
+          description: Club created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+
+  /clubs/{id}:
+    get:
+      summary: Get details of a specific club
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Club detail
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+
+  /clubs/{id}/members:
+    post:
+      summary: Add a member to the club
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MemberRequest'
+      responses:
+        '200':
+          description: Member added
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+
+  /clubs/{id}/members/{name}:
+    delete:
+      summary: Remove a member from the club
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: name
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Member removed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+
+  /clubs/{id}/books:
+    get:
+      summary: Get book proposals for a club
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Book proposals
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+    post:
+      summary: Propose a new book
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookProposal'
+      responses:
+        '200':
+          description: Book added
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /clubs/{id}/books/{bookID}/vote:
+    post:
+      summary: Vote for a book
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: bookID
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Vote registered
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+  /clubs/{id}/current:
+    get:
+      summary: Get the current selected book
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Current book
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+components:
+  schemas:
+    Club:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        members:
+          type: array
+          items:
+            type: string
+        proposals:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+        current_book:
+          $ref: '#/components/schemas/Book'
+    ClubCreateRequest:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    MemberRequest:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+        votes:
+          type: integer
+    BookProposal:
+      type: object
+      required:
+        - id
+        - title
+        - author
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        author:
+          type: string
+          
