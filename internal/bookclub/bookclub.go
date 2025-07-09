@@ -1,7 +1,7 @@
 package bookclub
 
 import (
-	"context"
+	// "cgontext"
 	"net/http"
 	"sync"
 
@@ -28,7 +28,7 @@ var (
 	mu    = sync.Mutex{}
 )
 
-func main() {
+func Main() {
 	InitDB()
 	
 	r := gin.Default()
